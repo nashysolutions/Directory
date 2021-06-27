@@ -20,11 +20,14 @@ struct Project {
 
 @StateObject var store: Directory<Project>
 
-var isEmpty: Bool
+// API on store
 func insert(_ candidates: [Project])
 func move(from source: IndexSet, to destination: Int)
 func delete(source: IndexSet) throws
 func binding(for item: Project) -> Binding<Project>
+
+var isEmpty: Bool
+var photos: PhotosDirectory<Project>
 ```
 
 ## Example
