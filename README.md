@@ -14,11 +14,22 @@ https://github.com/nashysolutions/Projects
 
 ```swift
 
-struct Project: Identifiable {
-    let id: UUID
+struct Project {
     let name: String
 }
 
+@StateObject var store: Directory<Project>
+
+var isEmpty: Bool
+func insert(_ candidates: [Project])
+func move(from source: IndexSet, to destination: Int)
+func delete(source: IndexSet) throws
+func binding(for item: Project) -> Binding<Project>
+```
+
+## Example
+
+```swift
 struct ContentView: View {
     
     @StateObject var store: Directory<Project>
