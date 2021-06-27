@@ -22,6 +22,7 @@ struct Project {
 
 // API on store
 func insert(_ candidates: [Project])
+func append(_ candidates: [Project])
 func move(from source: IndexSet, to destination: Int)
 func delete(source: IndexSet) throws
 func binding(for item: Project) -> Binding<Project>
