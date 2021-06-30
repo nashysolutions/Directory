@@ -155,10 +155,9 @@ public extension ItemStorageLocation where Item: Equatable {
 
 public extension ItemStorageLocation where Item: Comparable {
     
-    /// Inserts a items into the collection of existing items. The
-    /// order of which, as specified in your implementation of `Comparable`
-    /// will be maintained. A save event occurs automatically.
-    /// - Parameter candidates: The item to insert.
+    /// Inserts an item into the collection of existing items, in
+    /// chronological order. A save event occurs automatically.
+    /// - Parameter candidates: The items to insert.
     /// - Throws: WriteError
     func insert(_ candidates: [Item]) throws {
         var items = fetchedItems
@@ -167,10 +166,9 @@ public extension ItemStorageLocation where Item: Comparable {
         try save()
     }
     
-    /// Inserts an item into the collection of existing items. The
-    /// order of which, as specified in your implementation of `Comparable`
-    /// will be maintained. A save event occurs automatically.
-    /// - Parameter candidates: The item to insert.
+    /// Inserts an item into the collection of existing items, in
+    /// chronological order. A save event occurs automatically.
+    /// - Parameter candidate: The item to insert.
     /// - Throws: WriteError
     func insert(_ candidate: Item) throws {
         var items = fetchedItems
