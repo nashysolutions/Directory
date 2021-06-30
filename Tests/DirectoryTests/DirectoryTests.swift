@@ -32,7 +32,7 @@ final class DirectoryTests: XCTestCase {
         let address = "72 Heol Llinos"
         let property = Property(id: UUID(), date: Date(), address: address, parent: folder)
         let handler = try Directory<Property>(parent: folder, fileName: "properties.data")
-        handler.insert(property)
+        try handler.insert(property)
         try handler.save()
         handler.fetch(.sync)
         let fetched = try XCTUnwrap(handler.fetchedItems.first)
@@ -45,7 +45,7 @@ final class DirectoryTests: XCTestCase {
         let handler = try PhotosDirectory(item: property)
         let url = try XCTUnwrap(Bundle.module.url(forResource: "cat", withExtension: "png"))
         let data = try Data(contentsOf: url)
-        handler.insert(data)
+        try handler.insert(data)
         try handler.save()
         _ = try property.folder.file(named: "photos.json")
     }
@@ -63,8 +63,7 @@ final class DirectoryTests: XCTestCase {
         let data = try Data(contentsOf: url)
         
         // Save
-        handler.insert(data)
-        try handler.save()
+        try handler.insert(data)
         
         // Fetch
         let photo = try XCTUnwrap(handler.fetchedItems.first)
@@ -79,7 +78,7 @@ final class DirectoryTests: XCTestCase {
         let url = try XCTUnwrap(Bundle.module.url(forResource: "cat", withExtension: "png"))
         let data = try Data(contentsOf: url)
         let temp = TempPhoto(id: UUID(), date: Date(), folder: folder)
-        temp.write(data)
+        try temp.write(data)
         XCTAssertTrue(temp.id.uuidString == temp.fileName)
         let file = try folder.subfolder(named: "Photos").file(named: temp.fileName)
         XCTAssertTrue(file.nameExcludingExtension == temp.fileName)
@@ -103,7 +102,7 @@ final class DirectoryTests: XCTestCase {
         let url = try XCTUnwrap(Bundle.module.url(forResource: "cat", withExtension: "png"))
         let data = try Data(contentsOf: url)
         let temp = TempPhoto(id: UUID(), date: Date(), folder: tempLocation)
-        temp.write(data)
+        try temp.write(data)
         
         XCTAssertEqual(temp.parent, tempLocation)
         
@@ -112,7 +111,7 @@ final class DirectoryTests: XCTestCase {
         /// move temp photo to new location (e.g. a non-temporary location)
         let address = "72 Heol Llinos"
         let property = Property(id: UUID(), date: Date(), address: address, parent: folder)
-        let photo = Photo(temp: temp, item: property)
+        let photo = try Photo(temp: temp, item: property)
         
         XCTAssertNotNil(photo.read())
         

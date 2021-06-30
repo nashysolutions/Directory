@@ -35,102 +35,16 @@ public extension ItemSource {
     var isEmpty: Bool {
         count == 0
     }
-    
-    func move(from source: IndexSet, to destination: Int) {
-        fetchedItems.move(fromOffsets: source, toOffset: destination)
-    }
-    
-    func delete(source: IndexSet) throws {
-        let index = source.first!
-        try removeItem(at: index)
-    }
-    
-    func delete(item: Item) throws where Item: Equatable {
-        let predicate: (Item) -> Bool = { $0 == item }
-        if let index = fetchedItems.firstIndex(where: predicate) {
-            try removeItem(at: index)
-        }
-    }
-    
-    func removeItem(at index: IndexSet.Element) throws {
-        let item = fetchedItems.remove(at: index)
-        try item.folder.delete()
-    }
-    
-    func binding(for item: Item) -> Binding<Item> where Item: Equatable {
-        let index = fetchedItems.firstIndex(where: { $0 == item } )!
-        return Binding(
-            get: { self.fetchedItems[index] },
-            set: { self.fetchedItems[index] = $0 }
-        )
-    }
 }
 
-public extension ItemSource where Self: ItemStorageLocation {
-    
-    func move(from source: IndexSet, to destination: Int) throws {
-        fetchedItems.move(fromOffsets: source, toOffset: destination)
-        try save()
-    }
-    
-    func delete(source: IndexSet) throws {
-        let index = source.first!
-        try removeItem(at: index)
-    }
-    
-    func delete(item: Item) throws where Item: Equatable {
-        let predicate: (Item) -> Bool = { $0 == item }
-        if let index = fetchedItems.firstIndex(where: predicate) {
-            try removeItem(at: index)
-        }
-    }
-    
-    func removeItem(at index: IndexSet.Element) throws {
-        let item = fetchedItems.remove(at: index)
-        try item.folder.delete()
-        try save()
-    }
-}
-
-public extension ItemSource where Item: Equatable, Self: ItemStorageLocation {
-    
-    func append(_ candidate: Item) throws {
-        if fetchedItems.contains(candidate) {
-            return
-        }
-        fetchedItems.append(candidate)
-        try save()
-    }
-}
-
-public extension ItemSource where Item: Comparable, Self: ItemStorageLocation {
-    
-    func insert(_ candidates: [Item]) throws {
-        var items = fetchedItems
-        items.append(contentsOf: candidates)
-        fetchedItems = items.sorted()
-        try save()
-    }
-    
-    func insert(_ candidate: Item) throws {
-        var items = fetchedItems
-        items.append(candidate)
-        fetchedItems = items.sorted()
-        try save()
-    }
-}
-
-public extension ItemSource where Item == TempPhoto, Self: ItemStorageLocation {
-    
-    func removeItem(at index: IndexSet.Element) throws {
-        let item = fetchedItems.remove(at: index)
-        try item.file().delete()
-        try save()
-    }
-}
-
+/// The operation in which to execute a task.
 public enum DispatchOperation {
-    case sync, async(DispatchQueue)
+    
+    // Execute on the current queue
+    case sync
+    
+    // Execute on the provided queue
+    case async(DispatchQueue)
 }
 
 /// Provides a storage location. Preview mode is suitable for
@@ -158,6 +72,15 @@ public extension ItemStorageLocation {
         }
     }
     
+    func move(from source: IndexSet, to destination: Int) throws {
+        fetchedItems.move(fromOffsets: source, toOffset: destination)
+        try save()
+    }
+    
+    func delete(at index: Int) throws {
+        try removeItem(at: index)
+    }
+    
     private func fetchSynchronously() throws -> [Item] {
         let data = try file.read()
         if data.isEmpty { return [] }
@@ -180,10 +103,89 @@ public extension ItemStorageLocation {
         }
     }
     
+    private func removeItem(at index: Int) throws {
+        let item = fetchedItems.remove(at: index)
+        try item.folder.delete()
+        try save()
+    }
+    
     func save() throws {
         if isPreview { return }
         let data = try JSONEncoder().encode(fetchedItems)
         try file.write(data)
+    }
+}
+
+public extension ItemStorageLocation where Item: Equatable {
+    
+    /// Append an item to the end of the collection of existing items.
+    /// If the item already exists, it will be ignored. A save event
+    /// occurs automatically.
+    /// - Parameter candidate: The item to append.
+    /// - Throws: WriteError, EncodingError
+    func append(_ candidate: Item) throws {
+        if fetchedItems.contains(candidate) {
+            return
+        }
+        fetchedItems.append(candidate)
+        try save()
+    }
+    
+    /// Delete the specified item. If the item does not exist,
+    /// then it is ignored.
+    /// - Parameter item: The item to delete.
+    /// - Throws: LocationError, StoreError
+    func delete(item: Item) throws {
+        if let index = fetchedItems.firstIndex(of: item) {
+            try removeItem(at: index)
+        }
+    }
+    
+    /// Establish a binding to the specified item.
+    /// - Parameter item: The item to bind. Must be present in the store.
+    /// - Returns: A binding.
+    func binding(for item: Item) -> Binding<Item> {
+        let index = fetchedItems.firstIndex(of: item)!
+        return Binding(
+            get: { self.fetchedItems[index] },
+            set: { self.fetchedItems[index] = $0 }
+        )
+    }
+}
+
+public extension ItemStorageLocation where Item: Comparable {
+    
+    /// Inserts a items into the collection of existing items. The
+    /// order of which, as specified in your implementation of `Comparable`
+    /// will be maintained. A save event occurs automatically.
+    /// - Parameter candidates: The item to insert.
+    /// - Throws: WriteError
+    func insert(_ candidates: [Item]) throws {
+        var items = fetchedItems
+        items.append(contentsOf: candidates)
+        fetchedItems = items.sorted()
+        try save()
+    }
+    
+    /// Inserts an item into the collection of existing items. The
+    /// order of which, as specified in your implementation of `Comparable`
+    /// will be maintained. A save event occurs automatically.
+    /// - Parameter candidates: The item to insert.
+    /// - Throws: WriteError
+    func insert(_ candidate: Item) throws {
+        var items = fetchedItems
+        items.append(candidate)
+        fetchedItems = items.sorted()
+        try save()
+    }
+}
+
+public extension ItemStorageLocation where Item == TempPhoto {
+    
+    func removeItem(at index: Int) throws {
+        let item = fetchedItems.remove(at: index)
+        try item.file().delete()
+        try save()
     }
 }
 
@@ -338,6 +340,10 @@ public final class PhotosDirectory<Item: KangarooItem>: Directory<Photo<Item>> {
         fetchedItems.first?.read()
     }
     
+    /// Create items and inserts them into the collection of existing items. The
+    /// order of which, as specified in your implementation of `Comparable`
+    /// will be maintained. A save event occurs automatically.
+    /// - Parameter datas: The photo data to insert.
     public func insert(_ datas: [Data]) throws {
         let photos: [Photo<Item>] = try datas.map {
             let file = Photo(item: item)
@@ -347,6 +353,11 @@ public final class PhotosDirectory<Item: KangarooItem>: Directory<Photo<Item>> {
         try insert(photos)
     }
     
+    /// Creates an item and inserts it into the collection of existing items. The
+    /// order of which, as specified in your implementation of `Comparable`
+    /// will be maintained. A save event occurs automatically.
+    /// - Parameter data: The photo data to insert.
+    /// - Throws: WriteError
     public func insert(_ data: Data) throws {
         let photo = Photo(item: item)
         try photo.write(data)
@@ -356,7 +367,7 @@ public final class PhotosDirectory<Item: KangarooItem>: Directory<Photo<Item>> {
     /// Converts a temp photo into a permanent photo by moving
     /// the location of the asset out of a temp directory to a (presumably)
     /// non-temp directory (as specified in your Item's container implementation).
-    /// Order is maintained.
+    /// Order is maintained. A save event occurs automatically.
     /// - Parameter temps: The assets currently stored in the temp directory.
     /// - Throws: LocationError
     public func insert(temps: [TempPhoto]) throws {
@@ -369,7 +380,7 @@ public final class PhotosDirectory<Item: KangarooItem>: Directory<Photo<Item>> {
     /// Converts a temp photo into a permanent photo by moving
     /// the location of the asset out of a temp directory to a (presumably)
     /// non-temp directory (as specified in your Item's container implementation).
-    /// Order is maintained.
+    /// Order is maintained. A save event occurs automatically.
     /// - Parameter temp: The asset currently stored in the temp directory.
     /// - Throws: LocationError
     public func insert(temp: TempPhoto) throws {
@@ -380,6 +391,7 @@ public final class PhotosDirectory<Item: KangarooItem>: Directory<Photo<Item>> {
     /// Converts a temp photo into a permanent photo by moving
     /// the location of the asset out of a temp directory to a (presumably)
     /// non-temp directory (as specified in your Item's container implementation).
+    /// A save event occurs automatically.
     /// - Parameter temp: The asset currently stored in the temp directory.
     /// - Throws: LocationError
     public func append(temp: TempPhoto) throws {
@@ -390,6 +402,7 @@ public final class PhotosDirectory<Item: KangarooItem>: Directory<Photo<Item>> {
     /// Converts a temp photo into a permanent photo by moving
     /// the location of the asset out of a temp directory to a (presumably)
     /// non-temp directory (as specified in your Item's container implementation).
+    /// A save event occurs automatically.
     /// - Parameter temps: The assets currently stored in the temp directory.
     /// - Throws: LocationError
     public func append(temps: [TempPhoto]) throws {
