@@ -39,6 +39,17 @@ final class DirectoryTests: XCTestCase {
         XCTAssertTrue(property == fetched)
     }
     
+    func testDirectoryReadPreview() throws {
+        let address = "72 Heol Llinos"
+        let property = Property(id: UUID(), date: Date(), address: address, parent: folder)
+        let handler = try Directory<Property>(parent: folder, fileName: "properties.data", isPreview: true)
+        try handler.insert(property)
+        try handler.save()
+        handler.fetch(.sync)
+        let fetched = try XCTUnwrap(handler.fetchedItems.first)
+        XCTAssertTrue(property == fetched)
+    }
+    
     func testPhotosFileCreated() throws {
         let address = "72 Heol Llinos"
         let property = Property(id: UUID(), date: Date(), address: address, parent: folder)
