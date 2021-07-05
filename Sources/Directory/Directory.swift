@@ -60,6 +60,7 @@ public extension ItemStorageLocation {
     typealias ErrorConsumer = (Error) -> Void
     
     func fetch(_ operation: DispatchOperation, errorHandler: ErrorConsumer? = nil) {
+        if isPreview { return }
         switch operation {
         case .sync:
             do {
