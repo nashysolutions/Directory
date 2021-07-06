@@ -35,6 +35,11 @@ public extension ItemSource {
     var isEmpty: Bool {
         count == 0
     }
+    
+    @available(swift, obsoleted: 2.0.0, renamed: "delete(at:)")
+    func delete(source: IndexSet) throws {
+        fatalError()
+    }
 }
 
 /// The operation in which to execute a task.
