@@ -7,7 +7,7 @@ A lightweight and thin wrapper that provides a means of accessing the file syste
 Let's assume you have a data type called 'Project'.
 
 ```swift
-struct Project {
+struct Project: Identifiable, Equatable, Codable, Container, PhotoStore {
     let name: String
 }
 
