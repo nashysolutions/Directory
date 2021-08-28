@@ -1,6 +1,6 @@
 # Directory
 
-A lightweight and thin wrapper that provides a means of accessing the file system in a [SwiftUI](https://developer.apple.com/xcode/swiftui/) environment, conveniently.
+A means of accessing the file system in a [SwiftUI](https://developer.apple.com/xcode/swiftui/) environment, conveniently.
 
 ### Usage
 
