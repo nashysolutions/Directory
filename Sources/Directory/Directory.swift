@@ -262,7 +262,7 @@ public struct Photo<Item: KangarooItem>: Photograph {
     public let item: Item
     public let parent: Folder
     
-    public init(id: UUID = UUID(), date: Date = Date(), item: Item) {
+    init(id: UUID = UUID(), date: Date = Date(), item: Item) {
         self.id = id
         self.date = date
         self.item = item
