@@ -269,7 +269,7 @@ public struct Photo<Item: KangarooItem>: Photograph {
         self.parent = item.folder
     }
     
-    public init(temp: TempPhoto, item: Item) throws {
+    init(temp: TempPhoto, item: Item) throws {
         let file = try temp.file()
         self.init(id: temp.id, date: temp.date, item: item)
         try file.move(to: folder)
@@ -307,10 +307,12 @@ public struct TempPhoto: Photograph {
         self.init(id: id, date: date)
     }
     
-    public init(id: UUID = UUID(), date: Date = Date()) {
-        self.id = id
-        self.date = date
-        self.parent = .temporary
+    public init() {
+        self.init(id: .init(), date: .init())
+    }
+    
+    private init(id: UUID, date: Date) {
+        self.init(id: id, date: date, folder: .temporary)
     }
     
     init(id: UUID, date: Date, folder: Folder) {
