@@ -69,7 +69,7 @@ public extension ItemStorageLocation {
         switch operation {
         case .sync:
             do {
-                fetchedItems = try fetchSynchronously()
+                fetchedItems = try read()
             } catch {
                 errorHandler?(error)
             }
@@ -87,7 +87,7 @@ public extension ItemStorageLocation {
         try removeItem(at: index)
     }
     
-    private func fetchSynchronously() throws -> [Item] {
+    private func read() throws -> [Item] {
         let data = try file.read()
         if data.isEmpty { return [] }
         return try JSONDecoder().decode([Item].self, from: data)
@@ -96,7 +96,7 @@ public extension ItemStorageLocation {
     private func fetchAsynchronously(queue: DispatchQueue, errorHandler: ErrorConsumer?) {
         queue.async { [weak self] in
             do {
-                if let items = try self?.fetchSynchronously() {
+                if let items = try self?.read() {
                     DispatchQueue.main.async {
                         self?.fetchedItems = items
                     }
