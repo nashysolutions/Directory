@@ -64,17 +64,22 @@ public extension ItemStorageLocation {
     
     typealias ErrorConsumer = (Error) -> Void
     
-    func fetch(_ operation: DispatchOperation, errorHandler: ErrorConsumer? = nil) {
+    /// Asynchronously fetch data from disk.
+    /// - Parameter errorHandler: Fired if a `DecodingError` is thrown.
+    func fetch(errorHandler: ErrorConsumer? = nil) {
         if isPreview { return }
-        switch operation {
-        case .sync:
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             do {
-                fetchedItems = try fetchSynchronously()
+                if let items = try self?.read() {
+                    DispatchQueue.main.async {
+                        self?.fetchedItems = items
+                    }
+                }
             } catch {
-                errorHandler?(error)
+                DispatchQueue.main.async {
+                    errorHandler?(error)
+                }
             }
-        case .async(let queue):
-            fetchAsynchronously(queue: queue, errorHandler: errorHandler)
         }
     }
     
@@ -87,26 +92,10 @@ public extension ItemStorageLocation {
         try removeItem(at: index)
     }
     
-    private func fetchSynchronously() throws -> [Item] {
+    private func read() throws -> [Item] {
         let data = try file.read()
         if data.isEmpty { return [] }
         return try JSONDecoder().decode([Item].self, from: data)
-    }
-    
-    private func fetchAsynchronously(queue: DispatchQueue, errorHandler: ErrorConsumer?) {
-        queue.async { [weak self] in
-            do {
-                if let items = try self?.fetchSynchronously() {
-                    DispatchQueue.main.async {
-                        self?.fetchedItems = items
-                    }
-                }
-            } catch {
-                DispatchQueue.main.async {
-                    errorHandler?(error)
-                }
-            }
-        }
     }
     
     private func removeItem(at index: Int) throws {

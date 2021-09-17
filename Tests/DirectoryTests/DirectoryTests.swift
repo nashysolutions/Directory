@@ -34,7 +34,6 @@ final class DirectoryTests: XCTestCase {
         let handler = try Directory<Property>(parent: folder, fileName: "properties.data")
         try handler.insert(property)
         try handler.save()
-        handler.fetch(.sync)
         let fetched = try XCTUnwrap(handler.fetchedItems.first)
         XCTAssertTrue(property == fetched)
     }
@@ -45,7 +44,6 @@ final class DirectoryTests: XCTestCase {
         let handler = try Directory<Property>(parent: folder, fileName: "properties.data", isPreview: true)
         try handler.insert(property)
         try handler.save()
-        handler.fetch(.sync)
         let fetched = try XCTUnwrap(handler.fetchedItems.first)
         XCTAssertTrue(property == fetched)
     }
