@@ -64,6 +64,8 @@ public extension ItemStorageLocation {
     
     typealias ErrorConsumer = (Error) -> Void
     
+    /// Asynchronously fetch data from disk.
+    /// - Parameter errorHandler: Fired if a `DecodingError` is thrown.
     func fetch(errorHandler: ErrorConsumer? = nil) {
         if isPreview { return }
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
