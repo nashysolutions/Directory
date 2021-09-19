@@ -49,6 +49,12 @@ public extension ItemStorageLocation {
     
     typealias ErrorConsumer = (Error) -> Void
     
+    private func read() throws -> [Item] {
+        let data = try file.read()
+        if data.isEmpty { return [] }
+        return try JSONDecoder().decode([Item].self, from: data)
+    }
+    
     /// Asynchronously fetch data from disk.
     /// - Parameter errorHandler: Fired if a `DecodingError` is thrown.
     func fetch(errorHandler: ErrorConsumer? = nil) {
@@ -75,12 +81,6 @@ public extension ItemStorageLocation {
     
     func delete(at index: Int) throws {
         try removeItem(at: index)
-    }
-    
-    private func read() throws -> [Item] {
-        let data = try file.read()
-        if data.isEmpty { return [] }
-        return try JSONDecoder().decode([Item].self, from: data)
     }
     
     private func removeItem(at index: Int) throws {
