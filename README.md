@@ -1,7 +1,6 @@
 # Directory
 
-A means of accessing the file system in a [SwiftUI](https://developer.apple.com/xcode/swiftui/) environment, conveniently. 
-Persists types that confrom to codable and persists images.
+A means of accessing the file system in a [SwiftUI](https://developer.apple.com/xcode/swiftui/) environment, conveniently.
 
 ### Usage
 
