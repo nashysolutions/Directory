@@ -42,16 +42,6 @@ public extension ItemSource {
     }
 }
 
-/// The operation in which to execute a task.
-public enum DispatchOperation {
-    
-    // Execute on the current queue
-    case sync
-    
-    // Execute on the provided queue
-    case async(DispatchQueue)
-}
-
 /// Provides a storage location. Preview mode is suitable for
 /// PreviewProviders because it prevents save/write events, meaning
 /// all data will remain in memory only.
