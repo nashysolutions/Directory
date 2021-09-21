@@ -212,10 +212,10 @@ public extension Photograph {
     }
 
     func write(_ data: Data) throws {
-        guard !data.isEmpty else {
-            try? file().delete()
+        guard let image = UIImage(data: data), !data.isEmpty else {
             return
         }
+        Cache.stash(image, with: id, duration: .short)
         let file = try folder.createFileIfNeeded(withName: fileName)
         try file.write(data)
     }
