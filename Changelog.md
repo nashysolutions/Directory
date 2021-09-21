@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.0.0] - 2021-09-21
+
+Introduces a breaking change.
+
+### Changed
+
+- [Issue 13](https://github.com/nashysolutions/Directory/issues/13)
+All fetches are async. There is no longer an option to pass in a queue, or choose `.sync`.
+
+### Added
+
+- [Issue 12](https://github.com/nashysolutions/Directory/issues/12)
+Images are cached in volatile memory for a short duration of time, to avoid reduce a potentially high frequency of reads from disk, in certain situations.
+
 ## [2.0.1] - 2021-09-17
 
 ### Changed
