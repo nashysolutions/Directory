@@ -1,6 +1,7 @@
 import UIKit
 import SwiftUI
 import Files
+import Stash
 
 /// Provides a folder.
 public protocol Container {
