@@ -26,7 +26,7 @@ struct ContentView: View {
             }
         }
         .onAppear(perform: {
-            store.fetch(.async(.global(qos: .userInitiated)))
+            store.fetch()
         })
     }
         
