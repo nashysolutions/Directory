@@ -1,6 +1,7 @@
 import UIKit
 import SwiftUI
 import Files
+import Stash
 
 /// Provides a folder.
 public protocol Container {
@@ -191,6 +192,10 @@ public protocol Photograph: Identifiable, KangarooItem, Comparable {
 
 public extension Photograph {
     
+    private var cacheDuration: Expiry {
+        .short
+    }
+    
     var fileName: String {
         id.uuidString
     }
@@ -200,17 +205,21 @@ public extension Photograph {
     }
     
     func read() -> UIImage? {
-        if let data = try? file().read() {
-            return UIImage(data: data)
+        if let image = Cache.resource(for: id) {
+            return image
         }
-        return nil
+        guard let data = try? file().read(), let image = UIImage(data: data) else {
+            return nil
+        }
+        Cache.stash(image, with: id, duration: cacheDuration)
+        return image
     }
 
     func write(_ data: Data) throws {
-        guard !data.isEmpty else {
-            try? file().delete()
+        guard let image = UIImage(data: data), !data.isEmpty else {
             return
         }
+        Cache.stash(image, with: id, duration: cacheDuration)
         let file = try folder.createFileIfNeeded(withName: fileName)
         try file.write(data)
     }
