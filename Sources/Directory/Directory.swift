@@ -201,10 +201,14 @@ public extension Photograph {
     }
     
     func read() -> UIImage? {
-        if let data = try? file().read() {
-            return UIImage(data: data)
+        if let image = Cache.resource(for: id) {
+            return image
         }
-        return nil
+        guard let data = try? file().read(), let image = UIImage(data: data) else {
+            return nil
+        }
+        Cache.stash(image, with: id, duration: .short)
+        return image
     }
 
     func write(_ data: Data) throws {
