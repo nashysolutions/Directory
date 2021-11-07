@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.0.0] - 2021-11-07
+
+Introduces a breaking change. Minimum deployment target set to `iOS 15`.
+
+### Changed
+
+- [Issue 7](https://github.com/nashysolutions/Directory/issues/7)
+Adopting the new `Swift 5.5` concurrency features.
+
 ## [3.0.0] - 2021-09-21
 
 Introduces a breaking change.
