@@ -50,15 +50,19 @@ public extension ItemStorageLocation {
     
     typealias ErrorConsumer = (Error) -> Void
     
-    private func read() async throws -> [Item] {
+    private func read() throws -> [Item] {
         let data = try file.read()
         if data.isEmpty { return [] }
         return try JSONDecoder().decode([Item].self, from: data)
     }
     
     func fetch() async {
+        fetchAndWait()
+    }
+    
+    func fetchAndWait() {
         if isPreview { return }
-        let items = try? await read()
+        let items = try? read()
         fetchedItems = items ?? []
     }
     
