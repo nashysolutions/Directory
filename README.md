@@ -1,6 +1,6 @@
 # Directory
 
-A means of accessing the file system in a [SwiftUI](https://developer.apple.com/xcode/swiftui/) environment, conveniently.
+A means of accessing the file system in a [SwiftUI](https://developer.apple.com/xcode/swiftui/) environment, conveniently. Only suitable for small payloads. If using larger files and / or CloudKit consider using `NSFilCoordinator` directly.
 
 ### Usage
 
