@@ -1,6 +1,6 @@
 # Directory
 
-A means of accessing the file system in a [SwiftUI](https://developer.apple.com/xcode/swiftui/) environment, conveniently. Only suitable for small payloads. If using larger files and / or CloudKit consider using `NSFilCoordinator` directly.
+A means of accessing the file system in a [SwiftUI](https://developer.apple.com/xcode/swiftui/) environment, conveniently.
 
 ### Usage
 
@@ -11,7 +11,7 @@ struct Project: Codable, Equatable, Container {
 
     let name: String
     
-    // See wiki/Typical-implementation
+    // See wiki/typical-implementation
 }
 ```
 
@@ -41,12 +41,13 @@ struct ContentView: View {
     private func addProject() {
         let project = Project(name: "Project " + UUID().uuidString)
         try! store.append(project)
+        // See wiki/useful-api
     }
 }
 ```
 
 Demo App available [here](https://github.com/nashysolutions/Projects).
-See [Wiki](https://github.com/nashysolutions/Directory/wiki/Useful-API) for additional functionality.
+Only suitable for small payloads. If using larger files and / or CloudKit consider using `NSFilCoordinator` directly.
 
 ## Installation
 
