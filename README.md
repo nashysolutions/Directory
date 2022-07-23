@@ -11,7 +11,7 @@ struct Project: Codable, Equatable, Container {
 
     let name: String
     
-    // See [wiki](https://github.com/nashysolutions/Directory/wiki/Home) for implementation.
+    // See [wiki](https://github.com/nashysolutions/Directory/wiki/Typical-implementation).
 }
 ```
 
