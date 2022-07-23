@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.0.1] - 2022-07-23
+
+- [Issue 21](https://github.com/nashysolutions/Directory/issues/21)
+Updating dependency.
+
 ## [4.0.0] - 2021-11-07
 
 Introduces a breaking change. Minimum deployment target set to `iOS 15`.
