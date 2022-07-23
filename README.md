@@ -30,6 +30,8 @@ struct ContentView: View {
         })
     }
         
+    // stores peromanently to disk
+    // triggers UI re-render
     private func addProject() {
         let project = Project(name: "Project " + UUID().uuidString)
         try! store.append(project)
