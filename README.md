@@ -43,6 +43,7 @@ struct ContentView: View {
 ```
 
 Demo App available [here](https://github.com/nashysolutions/Projects).
+See [Wiki](https://github.com/nashysolutions/Directory/wiki/Useful-API) for additional functionality.
 
 ## Installation
 
