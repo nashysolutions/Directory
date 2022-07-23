@@ -46,6 +46,7 @@ struct ContentView: View {
 }
 ```
 
+* For parent child relationships see [wiki](https://github.com/nashysolutions/Directory/wiki/Typical-implementation#parent--child-relationships).
 * Demo App available [here](https://github.com/nashysolutions/Projects).
 * Only suitable for small payloads. If using larger files and / or CloudKit consider using `NSFilCoordinator` directly.
 
