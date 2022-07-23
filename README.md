@@ -29,7 +29,10 @@ struct ContentView: View {
             }
         }
         .onAppear(perform: {
-            store.fetch()
+            // store.fetchAndWait()
+            Task {
+               await store.fetch()
+            }
         })
     }
         
