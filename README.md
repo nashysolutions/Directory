@@ -7,12 +7,15 @@ A means of accessing the file system in a [SwiftUI](https://developer.apple.com/
 Let's assume you have a data type called 'Project'.
 
 ```swift
-struct Project: Codable {
+struct Project: Codable, Equatable, Container {
+
     let name: String
+    
+    // See [wiki](https://github.com/nashysolutions/Directory/wiki/Home) for implementation.
 }
 ```
 
-Using this package, you could setup a `@StateObject` of type `Directory<Project>` which will store that type to disk. You may also want to save images using `PhotosDirectory<Project>`.
+By conforming to the above protocols, you may now create `Directory<Project>` or `PhotosDirectory<Project>`.
 
 ```swift
 struct ContentView: View {
@@ -39,11 +42,8 @@ struct ContentView: View {
 }
 ```
 
-For the above to compile, the type `Project` would need to conform to a few protocols. For a detailed implementation, see the [wiki](https://github.com/nashysolutions/Directory/wiki/Home).
-
 Demo App available [here](https://github.com/nashysolutions/Projects).
 
 ## Installation
 
 Use the [Swift Package Manager documentation](https://github.com/apple/swift-package-manager/tree/master/Documentation). 
-See the [wiki](https://github.com/nashysolutions/Directory/wiki/Home) for more details.
