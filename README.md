@@ -41,13 +41,13 @@ struct ContentView: View {
     private func addProject() {
         let project = Project(name: "Project " + UUID().uuidString)
         try! store.append(project)
-        // See wiki/useful-api
+        // See wiki/useful-api for additional functionality.
     }
 }
 ```
 
-Demo App available [here](https://github.com/nashysolutions/Projects).
-Only suitable for small payloads. If using larger files and / or CloudKit consider using `NSFilCoordinator` directly.
+* Demo App available [here](https://github.com/nashysolutions/Projects).
+* Only suitable for small payloads. If using larger files and / or CloudKit consider using `NSFilCoordinator` directly.
 
 ## Installation
 
