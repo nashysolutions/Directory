@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "Directory",
-    platforms: [.iOS(.v13)],
+    platforms: [.iOS(.v13), .macOS(.v10_15)],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
@@ -13,7 +13,7 @@ let package = Package(
             targets: ["Directory"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/nashysolutions/Cache.git", .upToNextMinor(from: "1.0.0")),
+        .package(url: "https://github.com/nashysolutions/Cache.git", .upToNextMinor(from: "2.0.0")),
         .package(url: "https://github.com/JohnSundell/Files", .upToNextMinor(from: "4.2.0")),
     ],
     targets: [
