@@ -7,9 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [5.0.0] - 2022-07-26
 
-Significant refactoring and the removal of a feature has introduces several breaking changes. A migration guide has not been pulished, given this library is so small (and the changes aren't that impactful). 
-
 Now supports macOS.
+
+Significant refactoring and the removal of a feature has introduced breaking changes. Have not added deprecations/obsolete message because the changes aren't that impactful really.
 
 ### Changed
 
