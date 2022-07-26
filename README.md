@@ -1,5 +1,8 @@
 # Directory
 
+![iOS](https://img.shields.io/badge/iOS-13%2B-blue)
+![macOS](https://img.shields.io/badge/macOS-10.15%2B-blue)
+
 A means of accessing the file system in a [SwiftUI](https://developer.apple.com/xcode/swiftui/) environment, conveniently.
 
 ### Usage
