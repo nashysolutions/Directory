@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [5.0.0] - 2022-07-26
+
+Significant refactoring and the removal of a feature has introduces several breaking changes. A migration guide has not been pulished, given this library is so small (and the changes aren't that impactful). 
+
+Now supports macOS.
+
+### Changed
+
+- [Issue 24](https://github.com/nashysolutions/Directory/issues/24)
+Cache now has sensible limit.
+
+### Removed
+
+- [Issue 23](https://github.com/nashysolutions/Directory/issues/23)
+Is preview feature removed. Wiki updated.
+
 ## [4.0.1] - 2022-07-23
 
 - [Issue 21](https://github.com/nashysolutions/Directory/issues/21)
